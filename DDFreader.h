@@ -10,7 +10,7 @@
 #include "Arduino.h"
 #include <DDFcheck.h>
 #include <DDF_function.h>
-#include <DDFdevice.h>
+#include "DDFdevice.h"
 #include <ArduinoJson.h>
 #include <FS.h>
 #include <SD.h>
@@ -63,6 +63,7 @@ struct deviceInformation_t{
 
 
 class DDFreader{
+	friend class DDFdevice;
 public:
 	DDFreader();
 	void setDDFpath(String path);
@@ -91,7 +92,7 @@ private:
 
 	char* _json;
 	int _length;
-	char ddfJson[];
+	
 	String jsonStr;
 
 	String _ddfPath = "/";
@@ -117,6 +118,7 @@ private:
 	singlestep_t* stepArray;
 	DDFzoom* zoomArray;
 
+	char ddfJson[];
 };
 
 #endif /* LIBRARIES_DDFREADER_DDFREADER_H_ */

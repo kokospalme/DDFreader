@@ -5,8 +5,8 @@
  *      Author: Chris
  */
 
-#ifndef LIBRARIES_DDFREADER_DDFPOSITION_H_
-#define LIBRARIES_DDFREADER_DDFPOSITION_H_
+#ifndef 
+#define 
 #include <Arduino.h>
 #include <DDF_defines.h>
 
@@ -37,4 +37,4 @@ private:
 
 
 
-#endif /* LIBRARIES_DDFREADER_DDFPOSITION_H_ */
+#endif /*  */

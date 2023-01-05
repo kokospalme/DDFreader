@@ -5,8 +5,8 @@
  *      Author: Chris
  */
 
-#ifndef LIBRARIES_DDFREADER_DDFMATRIX_H_
-#define LIBRARIES_DDFREADER_DDFMATRIX_H_
+#ifndef DDFMATRIX_H_
+#define DDFMATRIX_H_
 #include <Arduino.h>
 #include <DDF_defines.h>
 #include "DDFrgb.h"
@@ -53,4 +53,4 @@ private:
 };
 
 
-#endif /* LIBRARIES_DDFREADER_DDFMATRIX_H_ */
+#endif /*  DDFMATRIX_H_ */

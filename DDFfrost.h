@@ -5,8 +5,8 @@
  *      Author: Chris
  */
 
-#ifndef LIBRARIES_DDFREADER_DDFFROST_H_
-#define LIBRARIES_DDFREADER_DDFFROST_H_
+#ifndef DDFFROST_H_
+#define DDFFROST_H_
 
 
 class DDFfrost{	//range
@@ -26,4 +26,4 @@ private:
 
 
 
-#endif /* LIBRARIES_DDFREADER_DDFFROST_H_ */
+#endif /*  DDFFROST_H_ */
