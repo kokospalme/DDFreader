@@ -12,21 +12,6 @@ String DDFreader:: _ddfPath = "/";
 ddfInformation_t DDFreader::ddfInfo;
 deviceInformation_t DDFreader::deviceInfo;
 
-uint16_t DDFreader::colorwheelCounter;
-uint16_t DDFreader::dimmerCounter = 0;
-uint16_t DDFreader::focusCounter = 0;
-uint16_t DDFreader::frostCounter = 0;
-uint16_t DDFreader::gobowheelCounter = 0;
-uint16_t DDFreader::matrixCounter = 0;
-uint16_t DDFreader::positionCounter = 0;
-uint16_t DDFreader::prismCounter = 0;
-uint16_t DDFreader::ptspeedCounter = 0;
-uint16_t DDFreader::rawCounter = 0;
-uint16_t DDFreader::rgbCounter = 0;
-uint16_t DDFreader::shutterCounter = 0;
-uint16_t DDFreader::stepfuncCounter = 0;
-uint16_t DDFreader::zoomCounter = 0;
-
 DDFreader::DDFreader(TinyXML *xml){	//class constructor
 	this->xml = xml;
 }
@@ -142,5 +127,39 @@ void DDFreader::XMLcallback( uint8_t statusflags, char* tagName,  uint16_t tagNa
 }
 
 void DDFreader::startTag(String tagName){
-	if(tagName == )
+	if(tagName.startsWith(TAG_DEVICE) == 0)Serial.println("xml is not a device");return;	//return if xml is not a device
+
+	if(tagName.equals(TAG_FUNCTIONS_COLORWHEEL) > 0){	//start new colorwheel
+		deviceInfo.colorwheelCount++;
+	}else if(tagName.equals(TAG_FUNCTIONS_DIMMER) > 0){
+		deviceInfo.dimmerCount++;
+	}else if(tagName.equals(TAG_FUNCTIONS_FOCUS) > 0){
+		deviceInfo.focusCount++;
+	}else if(tagName.equals(TAG_FUNCTIONS_FROST) > 0){
+		deviceInfo.frostCount++;
+	}else if(tagName.equals(TAG_FUNCTIONS_GOBOWHEEL) > 0){
+		deviceInfo.gobowheelCount++;
+	}else if(tagName.equals(TAG_FUNCTIONS_MATRIX) > 0){
+		deviceInfo.matrixCount++;
+	}else if(tagName.equals(TAG_FUNCTIONS_POSITION) > 0){
+		deviceInfo.positionCount++;
+	}else if(tagName.equals(TAG_FUNCTIONS_PRISM) > 0){
+		deviceInfo.prismCount++;
+	}else if(tagName.equals(TAG_FUNCTIONS_PTSPEED) > 0){
+		deviceInfo.ptspeedCount++;
+	}else if(tagName.equals(TAG_FUNCTIONS_RAW) > 0){
+		deviceInfo.rawCount++;
+	}else if(tagName.equals(TAG_FUNCTIONS_RGB) > 0){
+		deviceInfo.rgbCount++;
+	}else if(tagName.equals(TAG_FUNCTIONS_SHUTTER) > 0){
+		deviceInfo.shutterCount++;
+	}else if(tagName.equals(TAG_FUNCTIONS_STEP) > 0){
+		deviceInfo.StepCount++;
+	}else if(tagName.equals(TAG_FUNCTIONS_ZOOM) > 0){
+		deviceInfo.ZoomCount++;
+
+
+	}else if(tagName.equals(TAG_FUNCTIONS_POSITION_PAN) > 0){
+		deviceInfo.ZoomCount++;
+	}
 }

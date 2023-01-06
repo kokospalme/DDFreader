@@ -39,7 +39,41 @@
 #define PIN_SPI_SCK 18
 #define PIN_SPI_CSSD 5
 
-#define TAG_
+/* XML TAGS */
+#define TAG_DEVICE "/device"
+#define TEXT_DEVICETYPE "/device/type"
+#define TEXT_DMXCVERSION "/device/dmxcversion"
+#define TEXT_DDFVERSION "/device/ddfversion"
+
+#define TAG_INFO_LIBID_START "/device/information/ddf-library-id"
+#define TAG_INFO_MODEL "/device/information/model"
+#define TAG_INFO_VENDOR "/device/information/vendor"
+#define TAG_INFO_AUTHOR "/device/information/author"
+#define TAG_INFO_MODE "/device/information/mode"
+#define TAG_INO_ELECTRICAL "/device/information/electrical"
+#define TAG_INO_ELECTRICAL_STATIC "/device/information/electrical/static"
+#define TAG_INO_ELECTRICAL_dimmer "/device/information/electrical/dimmer"
+
+#define TAG_FUNCTIONS_COLORWHEEL "/device/functions/colorwheel"
+#define TAG_FUNCTIONS_DIMMER "/device/functions/dimmer"
+#define TAG_FUNCTIONS_FOCUS "/device/functions/focus"
+#define TAG_FUNCTIONS_FROST  "/device/functions/frost"
+#define TAG_FUNCTIONS_GOBOWHEEL  "/device/functions/gobowheel"
+#define TAG_FUNCTIONS_MATRIX "/device/functions/matrix"
+#define TAG_FUNCTIONS_POSITION "/device/functions/position"
+#define TAG_FUNCTIONS_POSITION_PAN "/device/functions/position/pan"
+#define TEXT_FUNCTIONS_POSITION_PAN_DMMXCHANNEL "/device/functions/position/pan/dmxchannel"	//ToDo: tags/text richtig??
+#define TEXT_FUNCTIONS_POSITION_PAN_DMMXCHANNEL "/device/functions/position/pan/finedmxchannel"
+#define TEXT_FUNCTIONS_POSITION_PAN_RANGE "/device/functions/position/pan/range/range"
+#define TAG_FUNCTIONS_POSITION_PTILT "/device/functions/position/tilt"
+#define TAG_FUNCTIONS_PRISM "/device/functions/prism"
+#define TAG_FUNCTIONS_PTSPEED "/device/functions/ptspeed"
+#define TAG_FUNCTIONS_RAW "/device/functions/raw"
+#define TAG_FUNCTIONS_RGB "/device/functions/rgb"
+#define TAG_FUNCTIONS_SHUTTER "/device/functions/shutter"
+#define TAG_FUNCTIONS_STEP "/device/functions/step"
+#define TAG_FUNCTIONS_ZOOM "/device/functions/zoom"
+
 struct ddfInformation_t{
 	String ddfLibraryId = "";
 	String model = "";
@@ -61,20 +95,20 @@ struct deviceInformation_t{
 
 	uint16_t functioncount = 0;
 
-	uint16_t colorwheelCount = 0;
-	uint16_t dimmerCount = 0;
-	uint16_t focusCount = 0;
-	uint16_t frostCount = 0;
-	uint16_t gobowheelCount = 0;
-	uint16_t matrixCount = 0;
-	uint16_t positionCount = 0;
-	uint16_t prismCount = 0;
-	uint16_t ptspeedCount = 0;
-	uint16_t rawCount = 0;
-	uint16_t rgbCount = 0;
-	uint16_t shutterCount = 0;
-	uint16_t StepCount = 0;
-	uint16_t ZoomCount = 0;
+	int colorwheelCount = -1;
+	int dimmerCount = -1;
+	int focusCount = -1;
+	int frostCount = -1;
+	int gobowheelCount = -1;
+	int matrixCount = -1;
+	int positionCount = -1;
+	int prismCount = -1;
+	int ptspeedCount = -1;
+	int rawCount = -1;
+	int rgbCount = -1;
+	int shutterCount = -1;
+	int StepCount = -1;
+	int ZoomCount = -1;
 
 };
 
@@ -98,23 +132,6 @@ private:
 	static void tagDeviceInformation(String text);
 
 
-
-
-	// void getDDFInformation();	//read DDF information
-	// void getDDFarrays();
-
-	// DDFdimmer getDDFfuncDimmer();
-	// DDFdimmer getDDFfuncDimmerArray(uint16_t no);
-	// void getDDFfuncFocus();
-	// DDFposition getDDFfuncPosition();
-	// void getDDFfuncPtspeed();
-	// DDFrgb getDDFfuncRgb();
-	// void getDDFfuncRawstep();	//ToDo: implement
-	// void getDDFfuncRaw();	//ToDo: implement
-	// void getDDFfuncMatrix();	//ToDo: iplement
-	// void getDDFfuncGobo();	//ToDO: implement
-	// void getDDFfuncColorwheel();	//ToDo: implement
-
 	// int _length;	//ToDo: obsolet?
 	static TinyXML *xml;
 
@@ -122,21 +139,6 @@ private:
 
 	static ddfInformation_t ddfInfo;
 	static deviceInformation_t deviceInfo;
-
-	static uint16_t colorwheelCounter;
-	static uint16_t dimmerCounter;
-	static uint16_t focusCounter;
-	static uint16_t frostCounter;
-	static uint16_t gobowheelCounter;
-	static uint16_t matrixCounter;
-	static uint16_t positionCounter;
-	static uint16_t prismCounter;
-	static uint16_t ptspeedCounter;
-	static uint16_t rawCounter;
-	static uint16_t rgbCounter;
-	static uint16_t shutterCounter;
-	static uint16_t stepfuncCounter;
-	static uint16_t zoomCounter;
 
 	colorwheel_t* colorwheelArray;	//temp array
 	singlecolor_t* colorArray;
