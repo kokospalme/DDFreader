@@ -5,24 +5,41 @@
  *      Author: Chris
  */
 
-#ifndef LIBRARIES_DDFREADER_DDFREADER_H_
-#define LIBRARIES_DDFREADER_DDFREADER_H_
+#ifndef DDFREADER_H_
+#define DDFREADER_H_
+
 #include "Arduino.h"
-#include <DDFcheck.h>
-#include <DDF_function.h>
 #include "DDFdevice.h"
-#include <ArduinoJson.h>
+#include "DDFcheck.h"
+#include "AbstractDDFfunction.h"
 #include <FS.h>
 #include <SD.h>
 #include <SPI.h>
+#include <TinyXML.h>
+
+#include "DDFdimmers.h"	//dimmers, rgbs, steps... objects
+#include "DDFrgbs.h"
+#include "DDFpositions.h"
+#include "DDFsteps.h"
+#include "DDFfocusses.h"
+#include "DDFfrosts.h"
+#include "DDFgobowheels.h"
+#include "DDFcolorwheels.h"
+#include "DDFmatrices.h"
+#include "DDFprisms.h"
+#include "DDFptspeeds.h"
+#include "DDFraws.h"
+#include "DDFshutters.h"	//ToDo: implement im Detail (shutter funktionen etc.)
+#include "DDFzooms.h"
 
 #define DDFBUFSIZE 6000	//Bytes
 
-#define PIN_SPI_MOSI 5
-#define PIN_SPI_MISO 16
-#define PIN_SPI_SCK 17
-#define PIN_SPI_CSSD 18
+#define PIN_SPI_MOSI 23
+#define PIN_SPI_MISO 19
+#define PIN_SPI_SCK 18
+#define PIN_SPI_CSSD 5
 
+#define TAG_
 struct ddfInformation_t{
 	String ddfLibraryId = "";
 	String model = "";
@@ -65,40 +82,61 @@ struct deviceInformation_t{
 class DDFreader{
 	friend class DDFdevice;
 public:
-	DDFreader();
-	void setDDFpath(String path);
+	
+	DDFreader(TinyXML *xml);	//constructor with pointer to tinyXML object
+	static void init();	//initialize SD card etc.
+	static void setDDFpath(String path);	//set folderpath
+	static void XMLcallback( uint8_t statusflags, char* tagName,  uint16_t tagNameLen,  char* data,  uint16_t dataLen );	//callback function for xml processing
+	static void readDDF(String filename);	//read DDF (with no return)
 
-	void checkFunctions(String filename);
-	void readDDF(String filename);
-	void readDDF(String filename, DDFdevice *device);
-//	DDFdevice readDDF(String *filename);
-//	deviceInformation_t readDDF(String *filename);
 
 private:
-	void getDDFInformation();	//read DDF information
-	void getDDFarrays();
 
-	DDFdimmer getDDFfuncDimmer();
-	DDFdimmer getDDFfuncDimmerArray(uint16_t no);
-	void getDDFfuncFocus();
-	DDFposition getDDFfuncPosition();
-	void getDDFfuncPtspeed();
-	DDFrgb getDDFfuncRgb();
-	void getDDFfuncRawstep();	//ToDo: implement
-	void getDDFfuncRaw();	//ToDo: implement
-	void getDDFfuncMatrix();	//ToDo: iplement
-	void getDDFfuncGobo();	//ToDO: implement
-	void getDDFfuncColorwheel();	//ToDo: implement
+	static String currentTag;
+	static void startTag(String tagName);
+	static void tagDevice(String text);
+	static void tagDeviceInformation(String text);
 
-	char* _json;
-	int _length;
-	
-	String jsonStr;
 
-	String _ddfPath = "/";
 
-	ddfInformation_t ddfInfo;
-	deviceInformation_t deviceInfo;
+
+	// void getDDFInformation();	//read DDF information
+	// void getDDFarrays();
+
+	// DDFdimmer getDDFfuncDimmer();
+	// DDFdimmer getDDFfuncDimmerArray(uint16_t no);
+	// void getDDFfuncFocus();
+	// DDFposition getDDFfuncPosition();
+	// void getDDFfuncPtspeed();
+	// DDFrgb getDDFfuncRgb();
+	// void getDDFfuncRawstep();	//ToDo: implement
+	// void getDDFfuncRaw();	//ToDo: implement
+	// void getDDFfuncMatrix();	//ToDo: iplement
+	// void getDDFfuncGobo();	//ToDO: implement
+	// void getDDFfuncColorwheel();	//ToDo: implement
+
+	// int _length;	//ToDo: obsolet?
+	static TinyXML *xml;
+
+	static String _ddfPath;
+
+	static ddfInformation_t ddfInfo;
+	static deviceInformation_t deviceInfo;
+
+	static uint16_t colorwheelCounter;
+	static uint16_t dimmerCounter;
+	static uint16_t focusCounter;
+	static uint16_t frostCounter;
+	static uint16_t gobowheelCounter;
+	static uint16_t matrixCounter;
+	static uint16_t positionCounter;
+	static uint16_t prismCounter;
+	static uint16_t ptspeedCounter;
+	static uint16_t rawCounter;
+	static uint16_t rgbCounter;
+	static uint16_t shutterCounter;
+	static uint16_t stepfuncCounter;
+	static uint16_t zoomCounter;
 
 	colorwheel_t* colorwheelArray;	//temp array
 	singlecolor_t* colorArray;
@@ -118,7 +156,6 @@ private:
 	singlestep_t* stepArray;
 	DDFzoom* zoomArray;
 
-	char ddfJson[];
-};
+}; extern DDFreader DDF;
 
 #endif /* LIBRARIES_DDFREADER_DDFREADER_H_ */
