@@ -7,7 +7,8 @@
 
 #ifndef DDFFROST_H_
 #define DDFFROST_H_
-
+#include <Arduino.h>
+#include <DDF_defines.h>
 
 class DDFfrost{	//range
 public:

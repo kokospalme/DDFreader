@@ -5,8 +5,8 @@
  *      Author: Chris
  */
 
-#ifndef LIBRARIES_DDFREADER_DDFFROSTS_H_
-#define LIBRARIES_DDFREADER_DDFFROSTS_H_
+#ifndef DDFFROSTS_H_
+#define DDFFROSTS_H_
 #include "DDFfrost.h"
 
 class DDFfrosts{

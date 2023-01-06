@@ -1,5 +1,5 @@
 /*
- * DDFdimmer.h
+ * DDFfocus.h
  *
  *  Created on: 26 Oct 2022
  *      Author: Chris
@@ -24,4 +24,4 @@ private:
 
 
 
-#endif /* LIBRARIES_DDFDIMMER_H_ */
+#endif /* DDFDIMMER_H_ */

@@ -5,9 +5,10 @@
  *      Author: Chris
  */
 
-#ifndef LIBRARIES_DDFREADER_DDFDEVICE_H_
-#define LIBRARIES_DDFREADER_DDFDEVICE_H_
+#ifndef DDFDEVICE_H_
+#define DDFDEVICE_H_
 #include "DDFreader.h"
+#include "AbstractDDFfunction.h"
 
 #include "DDFdimmers.h"	//dimmers, rgbs, steps... objects
 #include "DDFrgbs.h"

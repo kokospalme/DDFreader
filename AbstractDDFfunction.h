@@ -8,8 +8,8 @@
  *      https://stackoverflow.com/questions/64269298/arrays-of-template-class-objects
  */
 
-#ifndef LIBRARIES_DDFREADER_DDF_FUNCTION_H_
-#define LIBRARIES_DDFREADER_DDF_FUNCTION_H_
+#ifndef ABSTRACTDDFFUNCTION_H_
+#define ABSTRACTDDFFUNCTION_H_
 
 #include <Arduino.h>
 #include <DDFdimmer.h>
@@ -50,4 +50,4 @@ template <class T> void AbstractDDFfunction::Get(T* retval){
 }
 
 
-#endif /* LIBRARIES_DDFREADER_DDF_FUNCTION_H_ */
+#endif /* ABSTRACTDDFFUNCTION_H_ */

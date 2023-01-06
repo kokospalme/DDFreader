@@ -5,8 +5,8 @@
  *      Author: Chris
  */
 
-#ifndef LIBRARIES_DDFREADER_DDFFOCUSSESES_H_
-#define LIBRARIES_DDFREADER_DDFFOCUSSESES_H_
+#ifndef DDFFOCUSSESES_H_
+#define DDFFOCUSSESES_H_
 #include "DDFfocus.h"
 
 class DDFfocusses{

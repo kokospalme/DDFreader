@@ -5,8 +5,8 @@
  *      Author: Chris
  */
 
-#ifndef 
-#define 
+#ifndef DDFPOSITION_H_
+#define DDFPOSITION_H_
 #include <Arduino.h>
 #include <DDF_defines.h>
 
