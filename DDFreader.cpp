@@ -116,6 +116,8 @@ void DDFreader::XMLcallback( uint8_t statusflags, char* tagName,  uint16_t tagNa
     Serial.print(tagName);
     Serial.print(" text:");
     Serial.println(data);
+
+	 attribute(String(tagName), String(data));
   }
   else if  (statusflags & STATUS_ERROR)
   {
@@ -161,5 +163,24 @@ void DDFreader::startTag(String tagName){
 
 	}else if(tagName.equals(TAG_FUNCTIONS_POSITION_PAN) > 0){
 		deviceInfo.ZoomCount++;
+	}
+}
+
+void DDFreader::attribute(String tagName, String data){
+	if(tagName.equals(ATTRIBUTE_DEVICETYPE) > 0){	//devicetype
+		if(data.equals("DMXDevice") > 0) Serial.println("type: DMXdevice");
+	}else if(tagName.equals(ATTRIBUTE_DMXCVERSION) > 0){
+		String _mainversion = data.substring(0,data.indexOf("."));
+		Serial.print("mainversion: ");Serial.println(_mainversion);
+		ddfInfo.ddfversion[0] = (int) _mainversion.toInt();
+
+		data = data.substring(data.indexOf(".")+1, data.length());
+		String _subversion = data.substring(0,data.indexOf("."));
+		Serial.print("subversion: ");Serial.println(_subversion);
+		ddfInfo.ddfversion[1] = (int) _subversion.toInt();
+
+		data = data.substring(data.indexOf(".")+1, data.length());
+		Serial.print("subsubversion: ");Serial.println(data);
+		ddfInfo.ddfversion[2] = (int) data.toInt();
 	}
 }

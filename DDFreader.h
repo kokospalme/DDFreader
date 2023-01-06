@@ -41,9 +41,9 @@
 
 /* XML TAGS */
 #define TAG_DEVICE "/device"
-#define TEXT_DEVICETYPE "/device/type"
-#define TEXT_DMXCVERSION "/device/dmxcversion"
-#define TEXT_DDFVERSION "/device/ddfversion"
+#define ATTRIBUTE_DEVICETYPE "type"
+#define ATTRIBUTE_DMXCVERSION "dmxcversion"
+#define ATTRIBUTE_DDFVERSION "ddfvesion"
 
 #define TAG_INFO_LIBID_START "/device/information/ddf-library-id"
 #define TAG_INFO_MODEL "/device/information/model"
@@ -128,6 +128,8 @@ private:
 
 	static String currentTag;
 	static void startTag(String tagName);
+	static void attribute(String tagName, String data);
+
 	static void tagDevice(String text);
 	static void tagDeviceInformation(String text);
 
