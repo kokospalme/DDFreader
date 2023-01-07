@@ -11,6 +11,7 @@
 
 class DDFzooms{
 public:
+
 	DDFzooms(DDFzoom* array, uint16_t size){
 		_array = new DDFzoom[size];
 		for(int i = 0; i < size;i++){

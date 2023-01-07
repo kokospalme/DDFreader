@@ -12,6 +12,13 @@
 
 class DDFstep{
 public:
+	bool exist = false;
+	int dmxchannel = -1;
+	int finedmxchannel = -1;
+	
+	DDFstep(){//singlestep for first init
+		_array = new singlestep_t;
+	}
 	DDFstep(singlestep_t* array, uint16_t size){
 		_array = new singlestep_t[size];
 		for(int i = 0; i < size;i++){

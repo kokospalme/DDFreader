@@ -30,4 +30,4 @@ private:
 
 
 
-#endif /* LIBRARIES_DDFDIMMER_H_ */
+#endif /* DDFDIMMER_H_ */

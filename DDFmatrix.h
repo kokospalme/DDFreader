@@ -13,6 +13,10 @@
 
 class DDFmatrix{
 public:
+	bool exist = false;
+	int dmxchannel = -1;
+	int finedmxchannel = -1;
+	
 	DDFmatrix(uint8_t sizeX = 1,uint8_t sizeY = 1, uint8_t matrixtype = matrix_cartesian){
 		_size = sizeX * sizeY;
 		if(_size > 512){

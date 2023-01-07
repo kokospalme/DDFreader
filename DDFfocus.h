@@ -13,6 +13,7 @@
 class DDFfocus{
 public:
 	int dmxchannel = -1;
+	int finedmxchannel = -1;
 	uint8_t type = curve_linear;
 	uint8_t mindmx = 0;
 	uint8_t maxdmx = 255;
