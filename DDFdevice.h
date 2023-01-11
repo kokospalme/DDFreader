@@ -10,6 +10,8 @@
 #include "DDFreader.h"
 #include "AbstractDDFfunction.h"
 
+#include "DDFcolorwheel.h"
+
 #include "DDFdimmers.h"	//dimmers, rgbs, steps... objects
 #include "DDFrgbs.h"
 #include "DDFpositions.h"
@@ -28,15 +30,9 @@
 
 class DDFdevice{
 public:
-	DDFdevice(String model="empty", String vendor="empty", String author = "empty",
-			uint16_t colorwheelCount = 0, uint16_t colorCount = 0, uint16_t dimmerCount = 0, uint16_t focusCount = 0, uint16_t frostCount = 0, uint16_t gobowheelCount = 0,
-					uint16_t goboCount = 0, uint16_t matrixCount = 0, uint16_t positionCount = 0, uint16_t prismCount = 0,uint16_t ptspeedCount = 0, uint16_t rawCount = 0,
-					uint16_t rgbCount = 0, uint16_t shutterCount = 0, uint16_t stepCount = 0, uint16_t stepSinglestepCount = 0, uint16_t zoomCount = 0 );
-
-	void setMode(String mode);
-	void setddfLib(uint16_t id);
-	void setdmxcVersion(uint8_t main,uint8_t sub0, uint8_t sub1);
-	void setddfVersion(uint8_t main,uint8_t sub0, uint8_t sub1);
+	DDFdevice(ddfInformation_t ddfInfo, deviceInformation_t deviceInfo);
+	
+	void addColorwheels(DDFcolorwheel* array);
 
 	void addDimmer(DDFdimmer dimmer, uint16_t no);
 	void setDimmer(uint16_t dimmerNo, double value);
@@ -50,9 +46,8 @@ public:
 
 	void print();
 private:
-	String _model = "-";
-	String _vendor = "-";
-	String _author = "-";
+	ddfInformation_t _ddfInfo;	//info about ddf header
+	deviceInformation_t _deviceInfo;	//info about device 
 
 	uint16_t _functionCount = 1;	//max amount of functions
 
@@ -92,7 +87,7 @@ private:
 
 	AbstractDDFfunction* fnc_array;
 
-	DDFcolorwheels* _colorwheels;
+	DDFcolorwheel* _colorwheels;
 	DDFdimmers* _dimmers;	//ToDo: functions: raw, matrix, colorwheel, gobowheel, frost, ptspeed,prism, zoom, shutter
 	DDFshutters* _shutters;
 	DDFrgbs* _rgbs;

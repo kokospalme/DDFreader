@@ -36,7 +36,8 @@
 #define FNCID_STEP 20
 #define FNCID_ZOOM 21
 
-#define DDFBUFSIZE 6000	//Bytes
+#define DDFBUFSIZE 2000	//Bytes
+#define DDFBUFFERSIZE_SAFETY 150 	//bytes safety (next line must not exceed this size)
 
 #define PIN_SPI_MOSI 23
 #define PIN_SPI_MISO 19
@@ -64,7 +65,7 @@
 #define TAG_FUNCTIONS_COLORWHEEL_RAINBOW "/device/functions/colorwheel/rainbow"
 #define TAG_FUNCTIONS_COLORWHEEL_RAINBOW_STEP "/device/functions/colorwheel/rainbow/step"
 #define TAG_FUNCTIONS_COLORWHEEL_RAINBOW_RANGE "/device/functions/colorwheel/rainbow/range"
-#define TAG_FUNCTIONS_COLORWHEEL_RANDOM "/device/functions/colorwheel/rainbow"
+#define TAG_FUNCTIONS_COLORWHEEL_RANDOM "/device/functions/colorwheel/random"
 #define TAG_FUNCTIONS_COLORWHEEL_RANDOM_STEP "/device/functions/colorwheel/random/step"
 #define TAG_FUNCTIONS_COLORWHEEL_RANDOM_RANGE "/device/functions/colorwheel/random/range"
 #define TAG_FUNCTIONS_DIMMER "/device/functions/dimmer"
@@ -121,7 +122,13 @@
 #define ROTATIONTYPE_CLOCKWISE "cw"
 #define ROTATIONTYPE_COUNTERCLOCKWISE "ccw"
 
-struct ddfInformation_t{
+#define RANDOM_TYPE_FAST "fast"
+#define RANDOM_TYPE_MEDIUM "medium"
+#define RANDOM_TYPE_SLOW "slow"
+
+
+
+struct ddfInformation_t{	//struct for information about the ddf header
 	int ddfLibraryId = -1;
 	String model = "";
 	String vendor = "";
@@ -135,12 +142,12 @@ struct ddfInformation_t{
 	int electricalDimmer = 0;
 };
 
-struct deviceInformation_t{
-	bool readSucess = true;
+struct deviceInformation_t{	//struct for information about the functional dimensions of the device
+	bool readSucess = true;	//ToDo: obsolet? indicates, if the ddf is read properly
 
-	ddfInformation_t info;
+	ddfInformation_t info;	//info about ddf header (vendor, author etc...)
 
-	uint16_t functioncount = 0;
+	uint16_t functioncount = 0;	// ToDo: obsolet, da funktionen in "DDFdevice" Objekt gespeichert? amount of functions
 
 	int colorwheelCount = 0;
 	int singlecolorCount = 0;
@@ -148,6 +155,7 @@ struct deviceInformation_t{
 	int focusCount = 0;
 	int frostCount = 0;
 	int gobowheelCount = 0;
+	int singlegoboCount = 0;
 	int matrixCount = 0;
 	int positionCount = 0;
 	int prismCount = 0;
@@ -155,7 +163,8 @@ struct deviceInformation_t{
 	int rawCount = 0;
 	int rgbCount = 0;
 	int shutterCount = 0;
-	int stepCount = 0;
+	int stepfuncCount = 0;
+	int singlestepCount = 0;
 	int zoomCount = 0;
 
 };
@@ -192,18 +201,34 @@ struct stepfunc_t{
 	uint16_t size = 1;
 };
 
-struct singlecolor_t{
+struct singlecolor_t{	//struct for details about a single color of a colorwheel
+	uint16_t wheelNo = 0;
 	uint32_t color = 0xFFFFFF;
 	uint8_t mindmx = 0;
 	uint8_t maxdmx = 255;
 	String caption = "empty";
 };
 
-struct colorwheel_t{	//obsolet?
+struct colorwheel_t{	//struct for details about a single colorwheel
+	uint16_t size = 0;
 	int dmxchannel = -1;
-	uint16_t currentColor = 0;
-//	uint16_t colorCount = 1;	// min. 1 gobo/wheel ToDo: obsolet?
-	uint16_t size = 1;
+	int rainbowStopMindmx = -1;
+	int rainbowStopMaxdmx = -1;
+	int rainbowCwMindmx = -1;
+	int rainbowCwMaxdmx = -1;
+	double rainbowCwMinvalue = -1;
+	double rainbowCwMaxvalue = -1;
+	int rainbowCCwMindmx = -1;
+	int rainbowCCwMaxdmx = -1;
+	double rainbowCCwMinvalue = -1;
+	double rainbowCCwMaxvalue = -1;
+
+	int randomFastMindmx = -1;
+	int randomFastMaxdmx = -1;
+	int randomMediumMindmx = -1;
+	int randomMediumMaxdmx = -1;
+	int randomSlowMindmx = -1;
+	int randomSlowMaxdmx = -1;
 };
 
 struct singlegobo_t{

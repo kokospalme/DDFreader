@@ -17,6 +17,7 @@
 #include <SPI.h>
 #include <TinyXML.h>
 
+#include "DDFcolorwheel.h"
 #include "DDFdimmers.h"	//dimmers, rgbs, steps... objects
 #include "DDFrgbs.h"
 #include "DDFpositions.h"
@@ -32,6 +33,9 @@
 #include "DDFshutters.h"	//ToDo: implement im Detail (shutter funktionen etc.)
 #include "DDFzooms.h"
 
+#define DDFREADER_DEBUG
+#define DDFREADER_DEBUG_XML
+#define DDFREADER_DEBUG_CALLBACK
 
 class DDFreader{
 	friend class DDFdevice;
@@ -43,11 +47,13 @@ public:
 	static void XMLcallback( uint8_t statusflags, char* tagName,  uint16_t tagNameLen,  char* data,  uint16_t dataLen );	//callback function for xml processing
 	static void readDDF(String filename);	//read DDF (with no return)
 
-
 private:
 
+	static String parentTag;	//parent tag (in case a file has to be split)
+	static String lastTag;	//last Tag
 	static String currentTag;	//current Tag
 	static String currentRainbowtype;	//current rainbow type (colorwheel)
+	static String currentRandomtype;
 	static void startTag(String tagName);
 	static void tag(String tagName, String data);	//process tag
 	static void attribute(String tagName, String data);	//process attribute
@@ -59,7 +65,8 @@ private:
 	static void processCaption(String data);
 	static void processMindmx(String data);
 	static void processMaxdmx(String data);
-
+	static void processMinval(String data);
+	static void processMaxval(String data);
 	static void endTag(String tagName);
 	
 
@@ -72,7 +79,6 @@ private:
 
 	static String _ddfPath;
 
-	static String currentTag;	//indicates, what type of function is begin read in from xml
 	static ddfInformation_t ddfInfo;	//ddf information (vendor, author, model etc.)
 	static deviceInformation_t deviceInfo;	//device information (amount of dimmers, rgb etc.)
 

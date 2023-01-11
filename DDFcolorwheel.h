@@ -12,28 +12,17 @@
 
 class DDFcolorwheel{
 public:
-	int dmxchannel = -1;
-	int rainbowStopMindmx = -1;
-	int rainbowStopMaxdmx = -1;
-	int rainbowCwMindmx = -1;
-	int rainbowCwMaxdmx = -1;
-	double rainbowCwMinvalue = -1;
-	double rainbowCwMaxvalue = -1;
-	int rainbowCCwMindmx = -1;
-	int rainbowCCwMaxdmx = -1;
-	double rainbowCCwMinvalue = -1;
-	double rainbowCCwMaxvalue = -1;
 
 	virtual ~DDFcolorwheel(){
-		delete[] _colorArray;
+		delete[] _singlecolorArray;
 		delete[] _colorwheelArray;
 	}
 
-	void setGobowheel(colorwheel_t wheel, uint16_t no){
+	void setColorwheel(colorwheel_t wheel, uint16_t no){
 		if(no < _sizeWheels) _colorwheelArray[no] = wheel;
 	}
 
-	colorwheel_t getGobowheel(uint16_t no){
+	colorwheel_t getColorwheel(uint16_t no){
 		if(no < _sizeWheels)return _colorwheelArray[no];
 		else{
 			colorwheel_t empty;
@@ -41,27 +30,18 @@ public:
 		}
 	}
 
-	void setGobo(singlecolor_t color, uint16_t wheelNo, uint16_t colorNo){
-		if(wheelNo < _sizeWheels && colorNo < _colorwheelArray[wheelNo].size){
-			uint16_t _no = 0;
-			for(int i = 0; i < wheelNo; i++){
-				_no += _colorwheelArray[i].size;
-			}
-			_no += colorNo;
-			if(_no <_sizeGobos){
-				_colorArray[_no] = color;
-			}
-		}
+	void setColors(singlecolor_t* colorArray){
+		_singlecolorArray = colorArray;
 	}
 
-	singlecolor_t getGobo(uint16_t wheelNo, uint16_t colorNo){
+	singlecolor_t getSinglecolor(uint16_t wheelNo, uint16_t colorNo){
 		if(wheelNo < _sizeWheels && colorNo < _colorwheelArray[wheelNo].size){
 			uint16_t _no = 0;
 			for(int i = 0; i < wheelNo; i++){
 				_no += _colorwheelArray[i].size;
 			}
 			_no += colorNo;
-			return _colorArray[_no];
+			return _singlecolorArray[_no];
 		}
 		else{
 			singlecolor_t empty;
@@ -76,7 +56,7 @@ public:
 	}
 
 private:
-	singlecolor_t* _colorArray;
+	singlecolor_t* _singlecolorArray;
 	colorwheel_t* _colorwheelArray;
 	uint16_t _sizeWheels = 0;
 	uint16_t _sizeGobos = 0;
