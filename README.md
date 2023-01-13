@@ -8,9 +8,9 @@ DDFreader Library for Arduino
 
 ---
 ## implemented functions
- * [ ] device (image, dmxc version etc.)
- * [ ] information (mode, vendor, etc.)
- * [ ] colorwheel, wheelrotation
+ * [X] device (image, dmxc version etc.)
+ * [X] information (mode, vendor, etc.)
+ * [X] colorwheel, wheelrotation
  * [ ] dimmer, finedmx? range?
  * [ ] focus ?
  * [ ] frost ?
