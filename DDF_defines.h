@@ -62,6 +62,8 @@
 #define TAG_NONE "no Tag"
 #define TAG_FUNCTIONS_COLORWHEEL "/device/functions/colorwheel"
 #define TAG_FUNCTIONS_COLORWHEEL_STEP "/device/functions/colorwheel/step"
+#define TAG_FUNCTIONS_COLORWHEEL_ROTATION "/device/functions/colorwheel/wheelrotation"
+#define TAG_FUNCTIONS_COLORWHEEL_ROTATION_RANGE "/device/functions/colorwheel/wheelrotation/range"
 #define TAG_FUNCTIONS_COLORWHEEL_RAINBOW "/device/functions/colorwheel/rainbow"
 #define TAG_FUNCTIONS_COLORWHEEL_RAINBOW_STEP "/device/functions/colorwheel/rainbow/step"
 #define TAG_FUNCTIONS_COLORWHEEL_RAINBOW_RANGE "/device/functions/colorwheel/rainbow/range"
@@ -149,9 +151,10 @@ struct deviceInformation_t{	//struct for information about the functional dimens
 
 	uint16_t functioncount = 0;	// ToDo: obsolet, da funktionen in "DDFdevice" Objekt gespeichert? amount of functions
 
-	int colorwheelCount = 0;
-	int singlecolorCount = 0;
-	int dimmerCount = 0;
+	int colorwheelCount = 0;	//number of colorwheels
+	int singlecolorCount = 0;	//number of singlecolors in current wheel
+	int colorCount = 0;	//number of colors in total (all colorwheels)
+	int dimmerCount = 0;	//number of dimmers
 	int focusCount = 0;
 	int frostCount = 0;
 	int gobowheelCount = 0;
@@ -204,6 +207,9 @@ struct stepfunc_t{
 struct singlecolor_t{	//struct for details about a single color of a colorwheel
 	uint16_t wheelNo = 0;
 	uint32_t color = 0xFFFFFF;
+	uint8_t colorR = 0xFF;
+	uint8_t colorG = 0xFF;
+	uint8_t colorB = 0xFF;
 	uint8_t mindmx = 0;
 	uint8_t maxdmx = 255;
 	String caption = "empty";
@@ -211,22 +217,30 @@ struct singlecolor_t{	//struct for details about a single color of a colorwheel
 
 struct colorwheel_t{	//struct for details about a single colorwheel
 	uint16_t size = 0;
-	int dmxchannel = -1;
-	int rainbowStopMindmx = -1;
+	uint16_t wheelNo = 0;
+	int dmxchannel = -1;	//dmx channel
+
+	int rainbowStopMindmx = -1;	//rainbow/wheelrotation STOP
 	int rainbowStopMaxdmx = -1;
-	int rainbowCwMindmx = -1;
+	double rainbowStopMinvalue = -1;
+	double rainbowStopMaxvalue = -1;
+
+	int rainbowCwMindmx = -1;	//rainbow/wheelrotation CW
 	int rainbowCwMaxdmx = -1;
 	double rainbowCwMinvalue = -1;
 	double rainbowCwMaxvalue = -1;
-	int rainbowCCwMindmx = -1;
+
+	int rainbowCCwMindmx = -1;	//rainbow/wheelrotation CCW
 	int rainbowCCwMaxdmx = -1;
 	double rainbowCCwMinvalue = -1;
 	double rainbowCCwMaxvalue = -1;
 
-	int randomFastMindmx = -1;
+	int randomFastMindmx = -1;	//random color
 	int randomFastMaxdmx = -1;
+
 	int randomMediumMindmx = -1;
 	int randomMediumMaxdmx = -1;
+
 	int randomSlowMindmx = -1;
 	int randomSlowMaxdmx = -1;
 };

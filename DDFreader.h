@@ -24,6 +24,7 @@
 #include "DDFsteps.h"
 #include "DDFfocusses.h"
 #include "DDFfrosts.h"
+// #include "DDFgobowheel.h"
 #include "DDFgobowheels.h"
 #include "DDFcolorwheels.h"
 #include "DDFmatrices.h"
@@ -34,8 +35,8 @@
 #include "DDFzooms.h"
 
 #define DDFREADER_DEBUG
-#define DDFREADER_DEBUG_XML
-#define DDFREADER_DEBUG_CALLBACK
+// #define DDFREADER_DEBUG_XML
+// #define DDFREADER_DEBUG_CALLBACK
 
 class DDFreader{
 	friend class DDFdevice;
@@ -52,6 +53,7 @@ private:
 	static String parentTag;	//parent tag (in case a file has to be split)
 	static String lastTag;	//last Tag
 	static String currentTag;	//current Tag
+	static String currentRotationtype;
 	static String currentRainbowtype;	//current rainbow type (colorwheel)
 	static String currentRandomtype;
 	static void startTag(String tagName);
@@ -82,8 +84,9 @@ private:
 	static ddfInformation_t ddfInfo;	//ddf information (vendor, author, model etc.)
 	static deviceInformation_t deviceInfo;	//device information (amount of dimmers, rgb etc.)
 
-	static colorwheel_t* colorwheelArray;	//temp arrays
+	static colorwheel_t colorwheel;	//temp arrays
 	static singlecolor_t* colorArray;
+	static DDFcolorwheel* colorwheelArray;
 	static DDFdimmer* dimmerArray;
 	static DDFfocus* focusArray;
 	static DDFfrost* frostArray;

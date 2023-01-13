@@ -14,53 +14,34 @@ class DDFcolorwheel{
 public:
 
 	virtual ~DDFcolorwheel(){
-		delete[] _singlecolorArray;
-		delete[] _colorwheelArray;
+		// delete[] _singlecolorArray;
+		// delete[] _colorwheelArray;
 	}
 
-	void setColorwheel(colorwheel_t wheel, uint16_t no){
-		if(no < _sizeWheels) _colorwheelArray[no] = wheel;
+	void set(colorwheel_t info){	//set info
+		_info = info;	//update info
 	}
 
-	colorwheel_t getColorwheel(uint16_t no){
-		if(no < _sizeWheels)return _colorwheelArray[no];
-		else{
-			colorwheel_t empty;
-			return empty;
-		}
+	colorwheel_t get(){	//return info
+		return _info;
 	}
 
-	void setColors(singlecolor_t* colorArray){
+	void setColors(singlecolor_t* colorArray){	//set colors in color array
 		_singlecolorArray = colorArray;
 	}
 
-	singlecolor_t getSinglecolor(uint16_t wheelNo, uint16_t colorNo){
-		if(wheelNo < _sizeWheels && colorNo < _colorwheelArray[wheelNo].size){
-			uint16_t _no = 0;
-			for(int i = 0; i < wheelNo; i++){
-				_no += _colorwheelArray[i].size;
-			}
-			_no += colorNo;
-			return _singlecolorArray[_no];
-		}
-		else{
+	singlecolor_t getCcolor(uint16_t colorNo){	//get a single color
+		if(colorNo < sizeof(_singlecolorArray)-1){
+			return _singlecolorArray[colorNo];
+		}else{
 			singlecolor_t empty;
 			return empty;
 		}
 	}
 
-	uint16_t getSizeWheels(){ return _sizeWheels;}
-	uint16_t getSizeWheel(uint16_t wheelNo){
-		if(wheelNo < _sizeWheels) return _colorwheelArray[wheelNo].size;
-		else return 0;
-	}
-
 private:
 	singlecolor_t* _singlecolorArray;
-	colorwheel_t* _colorwheelArray;
-	uint16_t _sizeWheels = 0;
-	uint16_t _sizeGobos = 0;
-
+	colorwheel_t _info;
 };
 
 #endif /* DDFCOLORWHEEL_H_ */
