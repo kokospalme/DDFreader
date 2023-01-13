@@ -31,6 +31,7 @@
 #include "DDFprisms.h"
 #include "DDFptspeeds.h"
 #include "DDFraws.h"
+#include "DDFstrobe.h"
 #include "DDFshutters.h"	//ToDo: implement im Detail (shutter funktionen etc.)
 #include "DDFzooms.h"
 
@@ -56,6 +57,7 @@ private:
 	static String currentRotationtype;
 	static String currentRainbowtype;	//current rainbow type (colorwheel)
 	static String currentRandomtype;
+	static String currentCurvetype;
 	static void startTag(String tagName);
 	static void tag(String tagName, String data);	//process tag
 	static void attribute(String tagName, String data);	//process attribute
@@ -87,6 +89,8 @@ private:
 	static colorwheel_t colorwheel;	//temp arrays
 	static singlecolor_t* colorArray;
 	static DDFcolorwheel* colorwheelArray;
+
+	static dimmer_t dimmer;
 	static DDFdimmer* dimmerArray;
 	static DDFfocus* focusArray;
 	static DDFfrost* frostArray;
@@ -101,6 +105,8 @@ private:
 	static DDFshutter* shutterArray;
 	static DDFstep* stepfuncArray;
 	static singlestep_t* stepArray;
+	static strobe_t strobe;
+	static DDFstrobe* strobeArray;
 	static DDFzoom* zoomArray;
 
 }; extern DDFreader DDF;

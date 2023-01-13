@@ -12,16 +12,17 @@ DDFreader Library for Arduino
  * [X] information (mode, vendor, etc.)
  * [X] colorwheel, wheelrotation
  * [ ] dimmer, finedmx? range?
- * [ ] focus ?
- * [ ] frost ?
- * [ ] gobowheel ?
- * [ ] matrix ?
- * [ ] position ?
- * [ ] prism ?
- * [ ] ptspeed ?
- * [ ] raw ?
- * [ ] rgb ?
- * [ ] shutter ?
- * [ ] step ?
- * [ ] zoom ?
- * [ ] procedures ?
+ * [ ] focus
+ * [ ] frost
+ * [ ] gobowheel
+ * [ ] matrix
+ * [ ] position
+ * [ ] prism
+ * [ ] ptspeed
+ * [ ] raw
+ * [ ] rgb
+ * [ ] shutter
+ * [X] strobe (linear, pulse, random)
+ * [ ] step
+ * [ ] zoom
+ * [ ] procedures

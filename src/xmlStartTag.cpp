@@ -166,6 +166,19 @@ void DDFreader::startTag(String tagName){
 		#endif
 
 
+	}else if(tagName.equals(TAG_FUNCTIONS_STROBE) == true){
+		deviceInfo.strobeCount++;
+		DDFstrobe* newStrobefunc = new DDFstrobe[deviceInfo.strobeCount];	//declare new array
+		std::copy(strobeArray, strobeArray + std::min(deviceInfo.strobeCount-1, deviceInfo.strobeCount), newStrobefunc);	//copy to new array
+		delete[] strobeArray;	//delte old array
+		strobeArray = newStrobefunc;	//copy to old array
+		currentTag = tagName;
+		#ifdef DDFREADER_DEBUG
+		Serial.printf("new Strobe (#%u):\n",deviceInfo.strobeCount-1);
+		#endif
+
+	}else if(tagName.equals(TAG_FUNCTIONS_STROBE_RANGE) == true){
+		currentTag = tagName;
 	}else if(tagName.equals(TAG_FUNCTIONS_ZOOM) == true){
 		deviceInfo.zoomCount++;
 		DDFzoom* newZoom = new DDFzoom[deviceInfo.zoomCount];	//declare new array

@@ -18,25 +18,31 @@ String DDFreader::currentTag;	//init: type=none
 String DDFreader::currentRotationtype;
 String DDFreader::currentRainbowtype;
 String DDFreader::currentRandomtype;
+String DDFreader::currentCurvetype;
 ddfInformation_t DDFreader::ddfInfo;
 deviceInformation_t DDFreader::deviceInfo;
 
-colorwheel_t DDFreader::colorwheel;	//temp colorwheel stuff
+colorwheel_t DDFreader::colorwheel;	//temp colorwheel
 singlecolor_t* DDFreader::colorArray;
 DDFcolorwheel* DDFreader::colorwheelArray;
+
+dimmer_t DDFreader::dimmer;	//temp dimmer
 DDFdimmer* DDFreader::dimmerArray;
-DDFfocus* DDFreader::focusArray;
-DDFfrost* DDFreader::frostArray;
-gobowheel_t* DDFreader::gobowheelArray;
-singlegobo_t* DDFreader::goboArray;
-DDFmatrix* DDFreader::matrixArray;
-DDFposition* DDFreader::positionArray;
-DDFprism* DDFreader::prismArray;
-DDFptspeed* DDFreader::ptspeedArray;
-DDFraw* DDFreader::rawArray;
-DDFrgb* DDFreader::rgbArray;
-DDFshutter* DDFreader::shutterArray;
-DDFstep* DDFreader::stepfuncArray;
+
+DDFfocus* DDFreader::focusArray;	//focus
+DDFfrost* DDFreader::frostArray;	//frost
+gobowheel_t* DDFreader::gobowheelArray;	//temp gobowheel
+singlegobo_t* DDFreader::goboArray;	//singlegobo
+DDFmatrix* DDFreader::matrixArray;	//matrix
+DDFposition* DDFreader::positionArray;	//position
+DDFprism* DDFreader::prismArray;	//prism
+DDFptspeed* DDFreader::ptspeedArray;	//ptspeed
+DDFraw* DDFreader::rawArray;	//raw
+DDFrgb* DDFreader::rgbArray;	//rgb
+DDFshutter* DDFreader::shutterArray;	//shutter
+DDFstep* DDFreader::stepfuncArray;	//step
+strobe_t DDFreader::strobe;	//strobe
+DDFstrobe* DDFreader::strobeArray;
 singlestep_t* DDFreader::stepArray;
 DDFzoom* DDFreader::zoomArray;
 
@@ -112,7 +118,7 @@ void DDFreader::readDDF(String filename){
 			fallbackChar += charCounter;
 			// file.close();
 
-			Serial.printf("\n === buffer exceed (with safety).charCounter:%u.Serialize...\n", charCounter);
+			// Serial.printf("\n === buffer exceed (with safety).charCounter:%u.Serialize...\n", charCounter);
 			// charCounter = 0;	//charCounter to Zero
 			char *c = xmlBuffer;	//deserialize xml file	//ToDo: wieder aktivieren
 			do {
@@ -323,6 +329,28 @@ void DDFreader::endTag(String tagName){
 		Serial.printf(">> colorwheel #%u written to DDFdevice (%u colors) \n",
 		colorwheelArray[deviceInfo.colorwheelCount-1].get().wheelNo,
 		colorwheelArray[deviceInfo.colorwheelCount-1].get().size);
+		#endif
+	}else	if(tagName.equals(TAG_FUNCTIONS_DIMMER) == true){	//end dimmer
+		dimmerArray[deviceInfo.dimmerCount-1].set(dimmer);	//strobe to strobe obhect
+		
+		strobe_t _empty;
+		strobe = _empty;	//reset colorwheel
+		currentTag = TAG_NONE;
+		currentCurvetype = "";
+
+		#ifdef DDFREADER_DEBUG
+		Serial.printf(">> strobe #%u written to DDFdevice \n",deviceInfo.strobeCount-1);
+		#endif
+	}else	if(tagName.equals(TAG_FUNCTIONS_STROBE) == true){	//end strobe
+		strobeArray[deviceInfo.strobeCount-1].set(strobe);	//strobe to strobe obhect
+		
+		strobe_t _empty;
+		strobe = _empty;	//reset colorwheel
+		currentTag = TAG_NONE;
+		currentCurvetype = "";
+
+		#ifdef DDFREADER_DEBUG
+		Serial.printf(">> strobe #%u written to DDFdevice \n",deviceInfo.strobeCount-1);
 		#endif
 	}
 }

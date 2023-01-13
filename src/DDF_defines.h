@@ -10,32 +10,6 @@
 #include <Arduino.h>
 #include "DDFrgb.h"
 
-#define FNCID_NONE -1
-#define FNCID_COLORWHEEL 0
-#define FNCID_COLORWHEEL_STEP 22
-#define FNCID_COLORWHEEL_ROTATION 23
-#define FNCID_DIMMER 1
-#define FNCID_FOCUS 2
-#define FNCID_FROST 3
-#define FNCID_GOBOWHEEL 4
-#define FNCID_MATRIX 5
-#define FNCID_POSITION 6
-#define FNCID_POSITION_PAN 7
-#define FNCID_POSITION_TILT 8
-#define FNCID_PRISM 9
-#define FNCID_PTSPEED 10
-#define FNCID_RAW 11
-#define FNCID_RGB 12
-#define FNCID_RGB_R 13
-#define FNCID_RGB_G 14
-#define FNCID_RGB_B 15
-#define FNCID_RGB_W 16
-#define FNCID_RGB_A 17
-#define FNCID_RGB_UV 18
-#define FNCID_SHUTTER 19
-#define FNCID_STEP 20
-#define FNCID_ZOOM 21
-
 #define DDFBUFSIZE 2000	//Bytes
 #define DDFBUFFERSIZE_SAFETY 150 	//bytes safety (next line must not exceed this size)
 
@@ -97,7 +71,10 @@
 #define TAG_FUNCTIONS_RGB_A "/device/functions/rgb/amber"
 #define TAG_FUNCTIONS_RGB_U "/device/functions/rgb/uv"
 #define TAG_FUNCTIONS_SHUTTER "/device/functions/shutter"
+#define TAG_FUNCTIONS_SHUTTER_STEP "/device/functions/shutter/step"
 #define TAG_FUNCTIONS_STEP "/device/functions/step"
+#define TAG_FUNCTIONS_STROBE "/device/functions/strobe"
+#define TAG_FUNCTIONS_STROBE_RANGE "/device/functions/strobe/range"
 #define TAG_FUNCTIONS_ZOOM "/device/functions/zoom"
 
 #define ATTRIBUTE_DMXCHANNEL "dmxchannel"
@@ -118,6 +95,7 @@
 #define SHUTTERTYPE_OPEN "open"
 #define SHUTTERTYPE_CLOSED "closed"
 #define RANGE_LINEAR "linear"
+#define STROBETYPE_LINEAR "linear"
 #define STROBETYPE_PULSE "pulse"
 #define STROBETYPE_RANDOM "random"
 #define ROTATIONTYPE_STOP "stop"
@@ -154,6 +132,7 @@ struct deviceInformation_t{	//struct for information about the functional dimens
 	int colorwheelCount = 0;	//number of colorwheels
 	int singlecolorCount = 0;	//number of singlecolors in current wheel
 	int colorCount = 0;	//number of colors in total (all colorwheels)
+
 	int dimmerCount = 0;	//number of dimmers
 	int focusCount = 0;
 	int frostCount = 0;
@@ -166,8 +145,10 @@ struct deviceInformation_t{	//struct for information about the functional dimens
 	int rawCount = 0;
 	int rgbCount = 0;
 	int shutterCount = 0;
+	int shutterstepCount = 0;
 	int stepfuncCount = 0;
 	int singlestepCount = 0;
+	int strobeCount = 0;
 	int zoomCount = 0;
 
 };
@@ -175,6 +156,7 @@ struct deviceInformation_t{	//struct for information about the functional dimens
 enum dimCurves{
 	curve_linear
 };
+
 
 enum steptypes{
 	steps_color,
@@ -204,46 +186,6 @@ struct stepfunc_t{
 	uint16_t size = 1;
 };
 
-struct singlecolor_t{	//struct for details about a single color of a colorwheel
-	uint16_t wheelNo = 0;
-	uint32_t color = 0xFFFFFF;
-	uint8_t colorR = 0xFF;
-	uint8_t colorG = 0xFF;
-	uint8_t colorB = 0xFF;
-	uint8_t mindmx = 0;
-	uint8_t maxdmx = 255;
-	String caption = "empty";
-};
-
-struct colorwheel_t{	//struct for details about a single colorwheel
-	uint16_t size = 0;
-	uint16_t wheelNo = 0;
-	int dmxchannel = -1;	//dmx channel
-
-	int rainbowStopMindmx = -1;	//rainbow/wheelrotation STOP
-	int rainbowStopMaxdmx = -1;
-	double rainbowStopMinvalue = -1;
-	double rainbowStopMaxvalue = -1;
-
-	int rainbowCwMindmx = -1;	//rainbow/wheelrotation CW
-	int rainbowCwMaxdmx = -1;
-	double rainbowCwMinvalue = -1;
-	double rainbowCwMaxvalue = -1;
-
-	int rainbowCCwMindmx = -1;	//rainbow/wheelrotation CCW
-	int rainbowCCwMaxdmx = -1;
-	double rainbowCCwMinvalue = -1;
-	double rainbowCCwMaxvalue = -1;
-
-	int randomFastMindmx = -1;	//random color
-	int randomFastMaxdmx = -1;
-
-	int randomMediumMindmx = -1;
-	int randomMediumMaxdmx = -1;
-
-	int randomSlowMindmx = -1;
-	int randomSlowMaxdmx = -1;
-};
 
 struct singlegobo_t{
 	String path = "empty.gif";
@@ -279,5 +221,7 @@ struct matrixPixel_t{
 	int x_distance = -1;
 	DDFrgb pixel;
 };
+
+
 
 #endif /* DDF_DEFINES_H_ */

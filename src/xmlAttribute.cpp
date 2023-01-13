@@ -130,6 +130,13 @@ void DDFreader::processDmxchannel(String data){
 		Serial.printf("\tdmxchannel: %u\n",stepfuncArray[deviceInfo.stepfuncCount-1].dmxchannel);
 		#endif
 
+	}else if(currentTag == TAG_FUNCTIONS_STROBE ){
+		dataInt = (int) data.toInt();
+		strobe.dmxchannel = dataInt;
+		#ifdef DDFREADER_DEBUG
+		Serial.printf("\tdmxchannel: %u\n",strobe.dmxchannel);
+		#endif
+
 	}else if(currentTag == TAG_FUNCTIONS_ZOOM ){
 		dataInt = (int) data.toInt();
 		zoomArray[deviceInfo.zoomCount-1].dmxchannel = dataInt;
@@ -301,7 +308,6 @@ void DDFreader::processRange(String data){	//attribute "range"
 void DDFreader::processType(String data){	//process attribute "type"
 
 	if(currentTag.equals(TAG_FUNCTIONS_COLORWHEEL_STEP) == true){	//colorwheel step
-
 		if(data.equals(STEPTYPE_COLOR) == true){	//if type is "color": increase singlecolor array
 			deviceInfo.singlecolorCount++;
 			singlecolor_t* newSinglecolor = new singlecolor_t[deviceInfo.singlecolorCount];	//declare new array
@@ -313,7 +319,6 @@ void DDFreader::processType(String data){	//process attribute "type"
 			#endif
 
 		}
-
 	}else if(currentTag.equals(TAG_FUNCTIONS_COLORWHEEL_ROTATION_RANGE) == true ){	//colorwheel rainbow step
 		if(data == ROTATIONTYPE_STOP){
 			currentRotationtype = ROTATIONTYPE_STOP;
@@ -333,6 +338,22 @@ void DDFreader::processType(String data){	//process attribute "type"
 			currentRandomtype = RANDOM_TYPE_MEDIUM;
 		}else if(data.equals(RANDOM_TYPE_SLOW) == true){	//slow
 			currentRandomtype = RANDOM_TYPE_SLOW;
+		}
+	}else if(currentTag.equals(TAG_FUNCTIONS_SHUTTER_STEP) == true ){	//shutter step
+		if(data.equals(SHUTTERTYPE_OPEN) == true){	//if type is "open": increase shutterstep array
+			deviceInfo.singlecolorCount++;
+			singlecolor_t* newSinglecolor = new singlecolor_t[deviceInfo.singlecolorCount];	//declare new array
+			std::copy(colorArray, colorArray + std::min(deviceInfo.singlecolorCount-1, deviceInfo.singlecolorCount), newSinglecolor);	//copy to new array
+			colorArray = newSinglecolor;	//copy to old array
+			colorArray[deviceInfo.singlecolorCount-1].wheelNo = deviceInfo.colorwheelCount-1;
+			#ifdef DDFREADER_DEBUG
+			Serial.printf("\t==new step(open) (#%u):\n",deviceInfo.singlecolorCount-1);
+			#endif
+
+		}
+	}else if(currentTag.equals(TAG_FUNCTIONS_STROBE_RANGE) == true ){	//strobe curve type
+		if(data.equals(STROBETYPE_LINEAR) == true || data.equals(STROBETYPE_PULSE) == true || data.equals(STROBETYPE_RANDOM) == true){
+			currentCurvetype = data;
 		}
 	}
 
@@ -383,23 +404,23 @@ void DDFreader::processMindmx(String data){
 	}else if(currentTag.equals(TAG_FUNCTIONS_COLORWHEEL_ROTATION_RANGE) == 1 ){
 		if(currentRotationtype == ROTATIONTYPE_CLOCKWISE){
 			dataUint = (uint8_t) data.toInt();
-			colorwheel.rainbowCwMindmx = dataUint;
+			colorwheel.rainbow_cwMindmx = dataUint;
 			#ifdef DDFREADER_DEBUG
-			Serial.printf("\twheelrotation CW mindmx: %u\n",colorwheel.rainbowCwMindmx);
+			Serial.printf("\twheelrotation CW mindmx: %u\n",colorwheel.rainbow_cwMindmx);
 			#endif
 
 		}else if(currentRotationtype == ROTATIONTYPE_COUNTERCLOCKWISE){
 			dataUint = (uint8_t) data.toInt();
-			colorwheel.rainbowCCwMindmx = dataUint;
+			colorwheel.rainbow_ccwMindmx = dataUint;
 			#ifdef DDFREADER_DEBUG
-			Serial.printf("\twheelrotation CCW mindmx: %u\n",colorwheel.rainbowCCwMindmx);
+			Serial.printf("\twheelrotation CCW mindmx: %u\n",colorwheel.rainbow_ccwMindmx);
 			#endif
 
 		}else if(currentRotationtype == ROTATIONTYPE_STOP){
 			dataUint = (uint8_t) data.toInt();
-			colorwheel.rainbowCCwMindmx = dataUint;
+			colorwheel.rainbow_ccwMindmx = dataUint;
 			#ifdef DDFREADER_DEBUG
-			Serial.printf("\twheelrotation STOP mindmx: %u\n",colorwheel.rainbowCCwMindmx);
+			Serial.printf("\twheelrotation STOP mindmx: %u\n",colorwheel.rainbow_ccwMindmx);
 			#endif
 
 		}
@@ -407,48 +428,71 @@ void DDFreader::processMindmx(String data){
 	}else if(currentTag.equals(TAG_FUNCTIONS_COLORWHEEL_RAINBOW_STEP) == 1){
 		if(currentRainbowtype.equals(ROTATIONTYPE_STOP) == 1){
 			dataInt = (int) data.toInt();
-			colorwheel.rainbowStopMindmx = dataInt;
+			colorwheel.rainbow_stopMindmx = dataInt;
 			#ifdef DDFREADER_DEBUG
-			Serial.printf("\trainbow STOP mindmx: %i\n",colorwheel.rainbowStopMindmx);
+			Serial.printf("\trainbow STOP mindmx: %i\n",colorwheel.rainbow_stopMindmx);
 			#endif
 
 		}else if(currentRainbowtype.equals(ROTATIONTYPE_CLOCKWISE) ==  1){
 			dataInt = (int) data.toInt();
-			colorwheel.rainbowCwMindmx = dataInt;
+			colorwheel.rainbow_cwMindmx = dataInt;
 			#ifdef DDFREADER_DEBUG
 			Serial.printf("\trainbow CW mindmx: %i\n",colorArray[deviceInfo.singlecolorCount-1].mindmx);
 			#endif
 
 		}else if(currentRainbowtype.equals(ROTATIONTYPE_COUNTERCLOCKWISE) ==  1){
 			dataInt = (int) data.toInt();
-			colorwheel.rainbowCCwMindmx = dataInt;
+			colorwheel.rainbow_ccwMindmx = dataInt;
 			#ifdef DDFREADER_DEBUG
-			Serial.printf("\trainbow CCW mindmx %i\n",colorwheel.rainbowCCwMindmx);
+			Serial.printf("\trainbow CCW mindmx %i\n",colorwheel.rainbow_ccwMindmx);
 			#endif
 
 		}
 	}else if(currentTag.equals(TAG_FUNCTIONS_COLORWHEEL_RANDOM_STEP) == 1){
 		if(currentRandomtype.equals(RANDOM_TYPE_FAST) == 1){	//fast
 			dataInt = (int) data.toInt();
-			colorwheel.randomFastMindmx = dataInt;
+			colorwheel.random_fastMindmx = dataInt;
 			#ifdef DDFREADER_DEBUG
-			Serial.printf("\trandom fast mindmx: %i\n",colorwheel.randomFastMindmx);
+			Serial.printf("\trandom fast mindmx: %i\n",colorwheel.random_fastMindmx);
 			#endif
 
 		}else if(currentRainbowtype.equals(RANDOM_TYPE_MEDIUM) ==  1){	//medium
 			dataInt = (int) data.toInt();
-			colorwheel.randomMediumMindmx = dataInt;
+			colorwheel.random_mediumMindmx = dataInt;
 			#ifdef DDFREADER_DEBUG
-			Serial.printf("\trandom medium mindmx: %i\n",colorwheel.randomMediumMindmx);
+			Serial.printf("\trandom medium mindmx: %i\n",colorwheel.random_mediumMindmx);
 			#endif
 
 		}else if(currentRainbowtype.equals(RANDOM_TYPE_SLOW) ==  1){	//slow
 			dataInt = (int) data.toInt();
-			colorwheel.randomSlowMindmx = dataInt;
+			colorwheel.random_slowMindmx = dataInt;
 			#ifdef DDFREADER_DEBUG
-			Serial.printf("\trandom slow mindmx %i\n",colorwheel.randomSlowMindmx);
+			Serial.printf("\trandom slow mindmx %i\n",colorwheel.random_slowMindmx);
 			#endif
 
+		}
+	}else if(currentTag.equals(TAG_FUNCTIONS_STROBE_RANGE) == true ){	//strobe range
+		if(currentCurvetype.equals(STROBETYPE_LINEAR) == true){
+			dataInt = (int) data.toInt();
+			strobe.linear_exist = true;
+			strobe.linear_mindmx = dataInt;
+			#ifdef DDFREADER_DEBUG
+			Serial.printf("\tlinear mindmx %i\n",strobe.linear_mindmx);
+			#endif
+		}else if(currentCurvetype.equals(STROBETYPE_PULSE) == true){
+			dataInt = (int) data.toInt();
+			strobe.pulse_exist = true;
+			strobe.pulse_mindmx = dataInt;
+			#ifdef DDFREADER_DEBUG
+			Serial.printf("\tpulse mindmx %i\n",strobe.pulse_mindmx);
+			#endif
+		}else if(currentCurvetype.equals(STROBETYPE_RANDOM) == true){
+			dataInt = (int) data.toInt();
+			strobe.random_exist = true;
+			strobe.random_mindmx = dataInt;
+			#ifdef DDFREADER_DEBUG
+			Serial.printf("\trandom mindmx %i\n",strobe.random_mindmx);
+			#endif
 		}
 	}
 }
@@ -468,23 +512,23 @@ void DDFreader::processMaxdmx(String data){
 	}else if(currentTag.equals(TAG_FUNCTIONS_COLORWHEEL_ROTATION_RANGE) == 1 ){
 		if(currentRotationtype == ROTATIONTYPE_CLOCKWISE){
 			dataUint = (uint8_t) data.toInt();
-			colorwheel.rainbowCwMaxdmx = dataUint;
+			colorwheel.rainbow_cwMaxdmx = dataUint;
 			#ifdef DDFREADER_DEBUG
-			Serial.printf("\twheelrotation CW maxdmx: %u\n",colorwheel.rainbowCwMaxdmx);
+			Serial.printf("\twheelrotation CW maxdmx: %u\n",colorwheel.rainbow_cwMaxdmx);
 			#endif
 
 		}else if(currentRotationtype == ROTATIONTYPE_COUNTERCLOCKWISE){
 			dataUint = (uint8_t) data.toInt();
-			colorwheel.rainbowCCwMaxdmx = dataUint;
+			colorwheel.rainbow_ccwMaxdmx = dataUint;
 			#ifdef DDFREADER_DEBUG
-			Serial.printf("\twheelrotation CCW maxdmx: %u\n",colorwheel.rainbowCCwMaxdmx);
+			Serial.printf("\twheelrotation CCW maxdmx: %u\n",colorwheel.rainbow_ccwMaxdmx);
 			#endif
 
 		}else if(currentRotationtype == ROTATIONTYPE_STOP){
 			dataUint = (uint8_t) data.toInt();
-			colorwheel.rainbowStopMaxdmx = dataUint;
+			colorwheel.rainbow_stopMaxdmx = dataUint;
 			#ifdef DDFREADER_DEBUG
-			Serial.printf("\twheelrotation STOP maxdmx: %u\n",colorwheel.rainbowStopMaxdmx);
+			Serial.printf("\twheelrotation STOP maxdmx: %u\n",colorwheel.rainbow_stopMaxdmx);
 			#endif
 			
 		}
@@ -492,24 +536,24 @@ void DDFreader::processMaxdmx(String data){
 	}else if(currentTag.equals(TAG_FUNCTIONS_COLORWHEEL_RAINBOW_STEP) == 1){
 		if(currentRainbowtype.equals(ROTATIONTYPE_STOP) == 1){
 			dataInt = (int) data.toInt();
-			colorwheel.rainbowStopMaxdmx = dataInt;
+			colorwheel.rainbow_stopMaxdmx = dataInt;
 			#ifdef DDFREADER_DEBUG
-			Serial.printf("\trainbow STOP maxdmx: %i\n",colorwheel.rainbowStopMaxdmx);
+			Serial.printf("\trainbow STOP maxdmx: %i\n",colorwheel.rainbow_stopMaxdmx);
 			#endif
 
 		}else if(currentTag.equals(TAG_FUNCTIONS_COLORWHEEL_RAINBOW_RANGE) == 1){
 			if(currentRainbowtype.equals(ROTATIONTYPE_CLOCKWISE) ==  1){
 				dataInt = (int) data.toInt();
-				colorwheel.rainbowCwMaxdmx = dataInt;
+				colorwheel.rainbow_cwMaxdmx = dataInt;
 				#ifdef DDFREADER_DEBUG
-				Serial.printf("\trainbow CW maxdmx: %i\n",colorwheel.rainbowCwMaxdmx);
+				Serial.printf("\trainbow CW maxdmx: %i\n",colorwheel.rainbow_cwMaxdmx);
 				#endif
 
 			}else if(currentRainbowtype.equals(ROTATIONTYPE_COUNTERCLOCKWISE) ==  1){
 				dataInt = (int) data.toInt();
-				colorwheel.rainbowCCwMaxdmx = dataInt;
+				colorwheel.rainbow_ccwMaxdmx = dataInt;
 				#ifdef DDFREADER_DEBUG
-				Serial.printf("\trainbow CCW maxdmx: %i\n",colorwheel.rainbowCCwMaxdmx);
+				Serial.printf("\trainbow CCW maxdmx: %i\n",colorwheel.rainbow_ccwMaxdmx);
 				#endif
 
 			}
@@ -517,25 +561,48 @@ void DDFreader::processMaxdmx(String data){
 	}else if(currentTag.equals(TAG_FUNCTIONS_COLORWHEEL_RANDOM_STEP) == 1){
 		if(currentRandomtype.equals(RANDOM_TYPE_FAST) == 1){	//fast
 			dataInt = (int) data.toInt();
-			colorwheel.randomFastMaxdmx = dataInt;
+			colorwheel.random_fastMaxdmx = dataInt;
 			#ifdef DDFREADER_DEBUG
-			Serial.printf("\trandom fast maxdmx: %i\n",colorwheel.randomFastMaxdmx);
+			Serial.printf("\trandom fast maxdmx: %i\n",colorwheel.random_fastMaxdmx);
 			#endif
 
 		}else if(currentRainbowtype.equals(RANDOM_TYPE_MEDIUM) ==  1){	//medium
 			dataInt = (int) data.toInt();
-			colorwheel.randomMediumMaxdmx = dataInt;
+			colorwheel.random_mediumMaxdmx = dataInt;
 			#ifdef DDFREADER_DEBUG
-			Serial.printf("\trandom medium maxdmx: %i\n",colorwheel.randomMediumMaxdmx);
+			Serial.printf("\trandom medium maxdmx: %i\n",colorwheel.random_mediumMaxdmx);
 			#endif
 
 		}else if(currentRainbowtype.equals(RANDOM_TYPE_SLOW) ==  1){	//slow
 			dataInt = (int) data.toInt();
-			colorwheel.randomSlowMaxdmx = dataInt;
+			colorwheel.random_slowMaxdmx = dataInt;
 			#ifdef DDFREADER_DEBUG
-			Serial.printf("\trandom slow maxdmx %i\n",colorwheel.randomSlowMaxdmx);
+			Serial.printf("\trandom slow maxdmx %i\n",colorwheel.random_slowMaxdmx);
 			#endif
 
+		}
+	}else if(currentTag.equals(TAG_FUNCTIONS_STROBE_RANGE) == true ){	//strobe range
+		if(currentCurvetype.equals(STROBETYPE_LINEAR) == true){
+			dataInt = (int) data.toInt();
+			strobe.linear_exist = true;
+			strobe.linear_maxdmx = dataInt;
+			#ifdef DDFREADER_DEBUG
+			Serial.printf("\tlinear maxdmx %i\n",strobe.linear_maxdmx);
+			#endif
+		}else if(currentCurvetype.equals(STROBETYPE_PULSE) == true){
+			dataInt = (int) data.toInt();
+			strobe.pulse_exist = true;
+			strobe.pulse_maxdmx = dataInt;
+			#ifdef DDFREADER_DEBUG
+			Serial.printf("\tpulse maxdmx %i\n",strobe.pulse_maxdmx);
+			#endif
+		}else if(currentCurvetype.equals(STROBETYPE_RANDOM) == true){
+			dataInt = (int) data.toInt();
+			strobe.random_exist = true;
+			strobe.random_maxdmx = dataInt;
+			#ifdef DDFREADER_DEBUG
+			Serial.printf("\trandom maxdmx %i\n",strobe.random_maxdmx);
+			#endif
 		}
 	}
 }
@@ -546,43 +613,66 @@ void DDFreader::processMinval(String data){
 	else if(currentTag.equals(TAG_FUNCTIONS_COLORWHEEL_RAINBOW_RANGE) == 1){	//colorwheel rainbow range
 		if(currentRainbowtype.equals(ROTATIONTYPE_CLOCKWISE) ==  1){
 			dataDouble = (double) data.toDouble();
-			colorwheel.rainbowCwMinvalue = dataDouble;
+			colorwheel.rainbow_cwMinvalue = dataDouble;
 			#ifdef DDFREADER_DEBUG
-			Serial.printf("\trainbow CW minval: %lf\n",colorwheel.rainbowCwMinvalue);
+			Serial.printf("\trainbow CW minval: %lf\n",colorwheel.rainbow_cwMinvalue);
 			#endif
 
 		}else if(currentRainbowtype.equals(ROTATIONTYPE_COUNTERCLOCKWISE) ==  1){
 			dataDouble = (double) data.toDouble();
-			colorwheel.rainbowCCwMinvalue = dataDouble;
+			colorwheel.rainbow_ccwMinvalue = dataDouble;
 			#ifdef DDFREADER_DEBUG
-			Serial.printf("\trainbow CCW minval: %lf\n",colorwheel.rainbowCCwMinvalue);
+			Serial.printf("\trainbow CCW minval: %lf\n",colorwheel.rainbow_ccwMinvalue);
 			#endif
 
 		}
 	}else if(currentTag.equals(TAG_FUNCTIONS_COLORWHEEL_ROTATION_RANGE) == 1 ){
 		if(currentRotationtype == ROTATIONTYPE_CLOCKWISE){
 			dataDouble = data.toDouble();
-			colorwheel.rainbowCwMinvalue = dataDouble;
+			colorwheel.rainbow_cwMinvalue = dataDouble;
 			#ifdef DDFREADER_DEBUG
-			Serial.printf("\twheelrotation CW minvalue: %lf\n",colorwheel.rainbowCwMinvalue);
+			Serial.printf("\twheelrotation CW minvalue: %lf\n",colorwheel.rainbow_cwMinvalue);
 			#endif
 
 		}else if(currentRotationtype == ROTATIONTYPE_COUNTERCLOCKWISE){
 			dataDouble = data.toDouble();
-			colorwheel.rainbowCCwMinvalue = dataDouble;
+			colorwheel.rainbow_ccwMinvalue = dataDouble;
 			#ifdef DDFREADER_DEBUG
-			Serial.printf("\twheelrotation CCW minvalue: %lf\n",colorwheel.rainbowCCwMinvalue);
+			Serial.printf("\twheelrotation CCW minvalue: %lf\n",colorwheel.rainbow_ccwMinvalue);
 			#endif
 
 		}else if(currentRotationtype == ROTATIONTYPE_STOP){
 			dataDouble = data.toDouble();
-			colorwheel.rainbowStopMinvalue = dataDouble;
+			colorwheel.rainbow_stopMinvalue = dataDouble;
 			#ifdef DDFREADER_DEBUG
-			Serial.printf("\twheelrotation STOP minvalue: %lf\n",colorwheel.rainbowStopMinvalue);
+			Serial.printf("\twheelrotation STOP minvalue: %lf\n",colorwheel.rainbow_stopMinvalue);
 			#endif
 			
 		}
 
+	}else if(currentTag.equals(TAG_FUNCTIONS_STROBE_RANGE) == true ){	//strobe range
+		if(currentCurvetype.equals(STROBETYPE_LINEAR) == true){
+			dataDouble = data.toDouble();
+			strobe.linear_exist = true;
+			strobe.linear_minval = dataDouble;
+			#ifdef DDFREADER_DEBUG
+			Serial.printf("\tlinar minvalue: %lf\n",strobe.linear_minval);
+			#endif
+		}else if(currentCurvetype.equals(STROBETYPE_PULSE) == true){
+			dataDouble = data.toDouble();
+			strobe.pulse_exist = true;
+			strobe.pulse_minval = dataDouble;
+			#ifdef DDFREADER_DEBUG
+			Serial.printf("\tpulse minvalue: %lf\n",strobe.pulse_minval);
+			#endif
+		}else if(currentCurvetype.equals(STROBETYPE_RANDOM) == true){
+			dataDouble = data.toDouble();
+			strobe.random_exist = true;
+			strobe.random_minval = dataDouble;
+			#ifdef DDFREADER_DEBUG
+			Serial.printf("\trandom minvalue: %lf\n",strobe.random_minval);
+			#endif
+		}
 	}
 }
 
@@ -592,40 +682,63 @@ void DDFreader::processMaxval(String data){
 	else if(currentTag.equals(TAG_FUNCTIONS_COLORWHEEL_RAINBOW_RANGE) == 1){	//colorwheel rainbow range
 		if(currentRainbowtype.equals(ROTATIONTYPE_CLOCKWISE) ==  1){
 			dataDouble = (double) data.toDouble();
-			colorwheel.rainbowCwMaxvalue = dataDouble;
+			colorwheel.rainbow_cwMaxvalue = dataDouble;
 			#ifdef DDFREADER_DEBUG
-			Serial.printf("\trainbow CW maxval: %u\n",colorwheel.rainbowCwMaxvalue);
+			Serial.printf("\trainbow CW maxval: %u\n",colorwheel.rainbow_cwMaxvalue);
 			#endif
 
 		}else if(currentRainbowtype.equals(ROTATIONTYPE_COUNTERCLOCKWISE) ==  1){
 			dataDouble = (double) data.toDouble();
-			colorwheel.rainbowCCwMaxvalue = dataDouble;
+			colorwheel.rainbow_ccwMaxvalue = dataDouble;
 			#ifdef DDFREADER_DEBUG
-			Serial.printf("\trainbow CCW maxval: %u\n",colorwheel.rainbowCCwMaxvalue);
+			Serial.printf("\trainbow CCW maxval: %u\n",colorwheel.rainbow_ccwMaxvalue);
 			#endif
 		}
 	}else if(currentTag.equals(TAG_FUNCTIONS_COLORWHEEL_ROTATION_RANGE) == 1 ){
 		if(currentRotationtype == ROTATIONTYPE_CLOCKWISE){
 			dataDouble = data.toDouble();
-			colorwheel.rainbowCwMaxvalue = dataDouble;
+			colorwheel.rainbow_cwMaxvalue = dataDouble;
 			#ifdef DDFREADER_DEBUG
-			Serial.printf("\twheelrotation CW maxvalue: %lf\n",colorwheel.rainbowCwMaxvalue);
+			Serial.printf("\twheelrotation CW maxvalue: %lf\n",colorwheel.rainbow_cwMaxvalue);
 			#endif
 
 		}else if(currentRotationtype == ROTATIONTYPE_COUNTERCLOCKWISE){
 			dataDouble = data.toDouble();
-			colorwheel.rainbowCCwMaxvalue = dataDouble;
+			colorwheel.rainbow_ccwMaxvalue = dataDouble;
 			#ifdef DDFREADER_DEBUG
-			Serial.printf("\twheelrotation CCW maxvalue: %lf\n",colorwheel.rainbowCCwMaxvalue);
+			Serial.printf("\twheelrotation CCW maxvalue: %lf\n",colorwheel.rainbow_ccwMaxvalue);
 			#endif
 
 		}else if(currentRotationtype == ROTATIONTYPE_STOP){
 			dataDouble = data.toDouble();
-			colorwheel.rainbowStopMaxvalue = dataDouble;
+			colorwheel.rainbow_stopMaxvalue = dataDouble;
 			#ifdef DDFREADER_DEBUG
-			Serial.printf("\twheelrotation STOP maxvalue: %lf\n",colorwheel.rainbowStopMaxvalue);
+			Serial.printf("\twheelrotation STOP maxvalue: %lf\n",colorwheel.rainbow_stopMaxvalue);
 			#endif
 			
+		}
+	}else if(currentTag.equals(TAG_FUNCTIONS_STROBE_RANGE) == true ){	//strobe range
+		if(currentCurvetype.equals(STROBETYPE_LINEAR) == true){
+			dataDouble = data.toDouble();
+			strobe.linear_exist = true;
+			strobe.linear_maxval = dataDouble;
+			#ifdef DDFREADER_DEBUG
+			Serial.printf("\tlinar maxvalue: %lf\n",strobe.linear_maxval);
+			#endif
+		}else if(currentCurvetype.equals(STROBETYPE_PULSE) == true){
+			dataDouble = data.toDouble();
+			strobe.pulse_exist = true;
+			strobe.pulse_maxval = dataDouble;
+			#ifdef DDFREADER_DEBUG
+			Serial.printf("\tpulse maxvalue: %lf\n",strobe.pulse_maxval);
+			#endif
+		}else if(currentCurvetype.equals(STROBETYPE_RANDOM) == true){
+			dataDouble = data.toDouble();
+			strobe.random_exist = true;
+			strobe.random_maxval = dataDouble;
+			#ifdef DDFREADER_DEBUG
+			Serial.printf("\trandom maxvalue: %lf\n",strobe.random_maxval);
+			#endif
 		}
 	}
 }

@@ -11,21 +11,37 @@
 #include <Arduino.h>
 #include <DDF_defines.h>
 
-
-class DDFdimmer{	//range
-public:
+struct dimmer_t{
 	bool exist = false;
-	bool isMaster = true;
+	bool isMaster = false;
+
 	int dmxchannel = -1;
 	int finedmxchannel = -1;
+
 	int type = curve_linear;
 	uint8_t mindmx = 0;
 	uint8_t maxdmx = 255;
+
 	double minval = 0;
 	double maxval = 100;
-	double value = 0;
-private:
+};
 
+class DDFdimmer{	//dimmer class
+friend class DDFreader;
+public:
+	virtual ~DDFdimmer(){	//deconstructor
+		// delete[] _singlecolorArray;
+		// delete[] _colorwheelArray;
+	}
+	dimmer_t get(){	//return info
+		return _info;
+	}
+private:
+	void set(dimmer_t info){	//set info
+		_info = info;	//update info
+	}
+
+	dimmer_t _info;
 };
 
 
