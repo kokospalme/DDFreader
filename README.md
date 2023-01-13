@@ -2,7 +2,8 @@
 Arduino library for reading DDF devices from filesystem
 DDFreader Library for Arduino
 ----
-https://ddf.dmxcontrol.de/home
+##### DDFs
+ https://ddf.dmxcontrol.de/home
 ---
 ## implemented functions
  * device (image, dmxc version etc.)
