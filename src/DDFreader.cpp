@@ -39,7 +39,11 @@ DDFprism* DDFreader::prismArray;	//prism
 DDFptspeed* DDFreader::ptspeedArray;	//ptspeed
 DDFraw* DDFreader::rawArray;	//raw
 DDFrgb* DDFreader::rgbArray;	//rgb
+
+shutter_t DDFreader::shutter;
+shutterstep_t* DDFreader::shutterstepArray;
 DDFshutter* DDFreader::shutterArray;	//shutter
+
 DDFstep* DDFreader::stepfuncArray;	//step
 strobe_t DDFreader::strobe;	//strobe
 DDFstrobe* DDFreader::strobeArray;

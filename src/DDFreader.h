@@ -39,7 +39,7 @@
 // #define DDFREADER_DEBUG_XML
 // #define DDFREADER_DEBUG_CALLBACK
 
-class DDFreader{
+class 7DDFreader{
 	friend class DDFdevice;
 public:
 	
@@ -86,12 +86,13 @@ private:
 	static ddfInformation_t ddfInfo;	//ddf information (vendor, author, model etc.)
 	static deviceInformation_t deviceInfo;	//device information (amount of dimmers, rgb etc.)
 
-	static colorwheel_t colorwheel;	//temp arrays
+	static colorwheel_t colorwheel;	//temp colorwheel
 	static singlecolor_t* colorArray;
 	static DDFcolorwheel* colorwheelArray;
 
-	static dimmer_t dimmer;
+	static dimmer_t dimmer;	//temp dimmer
 	static DDFdimmer* dimmerArray;
+
 	static DDFfocus* focusArray;
 	static DDFfrost* frostArray;
 	static gobowheel_t* gobowheelArray;
@@ -102,7 +103,11 @@ private:
 	static DDFptspeed* ptspeedArray;
 	static DDFraw* rawArray;
 	static DDFrgb* rgbArray;
+
+	static DDFshutter_t shutter;	//temp shutter
+	static DDFshutterstep* shutterstepArray;
 	static DDFshutter* shutterArray;
+
 	static DDFstep* stepfuncArray;
 	static singlestep_t* stepArray;
 	static strobe_t strobe;
