@@ -154,6 +154,8 @@ void DDFreader::startTag(String tagName){
 		Serial.printf("new Shutter (#%u):\n",deviceInfo.shutterCount-1);
 		#endif
 
+	}else if(tagName.equals(TAG_FUNCTIONS_SHUTTER_STEP) == true){
+		currentTag = tagName;
 	}else if(tagName.equals(TAG_FUNCTIONS_STEP) == true){
 		deviceInfo.stepfuncCount++;
 		DDFstep* newStepfunc = new DDFstep[deviceInfo.stepfuncCount];	//declare new array
@@ -183,7 +185,7 @@ void DDFreader::startTag(String tagName){
 		deviceInfo.zoomCount++;
 		DDFzoom* newZoom = new DDFzoom[deviceInfo.zoomCount];	//declare new array
 		std::copy(zoomArray, zoomArray + std::min(deviceInfo.zoomCount-1, deviceInfo.zoomCount), newZoom);	//copy to new array
-		delete[] zoomArray;	//delte old array
+		// delete[] zoomArray;	//delte old array
 		zoomArray = newZoom;	//copy to old array
 		currentTag = tagName;
 		#ifdef DDFREADER_DEBUG

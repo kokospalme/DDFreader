@@ -341,13 +341,23 @@ void DDFreader::processType(String data){	//process attribute "type"
 		}
 	}else if(currentTag.equals(TAG_FUNCTIONS_SHUTTER_STEP) == true ){	//shutter step
 		if(data.equals(SHUTTERTYPE_OPEN) == true){	//if type is "open": increase shutterstep array
-			deviceInfo.singlecolorCount++;
-			singlecolor_t* newSinglecolor = new singlecolor_t[deviceInfo.singlecolorCount];	//declare new array
-			std::copy(colorArray, colorArray + std::min(deviceInfo.singlecolorCount-1, deviceInfo.singlecolorCount), newSinglecolor);	//copy to new array
-			colorArray = newSinglecolor;	//copy to old array
-			colorArray[deviceInfo.singlecolorCount-1].wheelNo = deviceInfo.colorwheelCount-1;
+			deviceInfo.shutterstepCount++;
+			shutterstep_t* newShutterstep = new shutterstep_t[deviceInfo.shutterstepCount];	//declare new array
+			std::copy(shutterstepArray, shutterstepArray + std::min(deviceInfo.shutterstepCount-1, deviceInfo.shutterstepCount), newShutterstep);	//copy to new array
+			shutterstepArray = newShutterstep;	//copy to old array
+			shutterstepArray[deviceInfo.shutterstepCount-1]. = deviceInfo.shutterstepCount-1;
 			#ifdef DDFREADER_DEBUG
-			Serial.printf("\t==new step(open) (#%u):\n",deviceInfo.singlecolorCount-1);
+			Serial.printf("\t==new step(open) (#%u):\n",deviceInfo.shutterstepCount-1);
+			#endif
+
+		}else if(data.equals(SHUTTERTYPE_CLOSED) == true){	//if type is "closed": increase shutterstep array
+			deviceInfo.shutterstepCount++;
+			shutterstep_t* newShutterstep = new shutterstep_t[deviceInfo.shutterstepCount];	//declare new array
+			std::copy(shutterstepArray, shutterstepArray + std::min(deviceInfo.shutterstepCount-1, deviceInfo.shutterstepCount), newShutterstep);	//copy to new array
+			shutterstepArray = newShutterstep;	//copy to old array
+			shutterstepArray[deviceInfo.shutterstepCount-1]. = deviceInfo.shutterstepCount-1;
+			#ifdef DDFREADER_DEBUG
+			Serial.printf("\t==new step(closed) (#%u):\n",deviceInfo.shutterstepCount-1);
 			#endif
 
 		}

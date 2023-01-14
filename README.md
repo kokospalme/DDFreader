@@ -14,14 +14,14 @@ DDFreader Library for Arduino
  * [ ] dimmer, finedmx? range?
  * [ ] focus
  * [ ] frost
- * [ ] gobowheel
+ * [ ] gobowheel, ToDos: increase singlegoboArray if type "gobo", goboshake handler, value with filepath, wheelrotation, goborotation, goboindex
  * [ ] matrix
  * [ ] position
  * [ ] prism
  * [ ] ptspeed
  * [ ] raw
  * [ ] rgb
- * [ ] shutter
+ * [ ] shutter, next ToDo: increase step Array if type "open" or "closed"
  * [X] strobe (linear, pulse, random)
  * [ ] step
  * [ ] zoom
